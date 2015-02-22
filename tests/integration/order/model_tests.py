@@ -3,6 +3,7 @@ from decimal import Decimal as D
 
 from django.test import TestCase
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 import mock
 
 from oscar.apps.order.exceptions import (
@@ -372,20 +373,20 @@ class OrderTests(TestCase):
         event_2 = ShippingEventFactory(order=order, event_type__name='Returned')
 
         # Default status
-        self.assertEqual(unicode(order.shipping_status), 'In progress')
+        self.assertEqual(order.shipping_status, _('In progress'))
 
         # Set first line to shipped
         event_1.line_quantities.create(line=line_1, quantity=2)
-        self.assertEqual(unicode(order.shipping_status), 'In progress')
+        self.assertEqual(order.shipping_status, _('In progress'))
 
         # Set first line to returned
         event_2.line_quantities.create(line=line_1, quantity=2)
-        self.assertEqual(unicode(order.shipping_status), 'In progress')
+        self.assertEqual(order.shipping_status, _('In progress'))
 
         # Set second line to shipped
         event_1.line_quantities.create(line=line_2, quantity=1)
-        self.assertEqual(unicode(order.shipping_status), 'Shipped')
+        self.assertEqual(order.shipping_status, _('Shipped'))
 
         # Set second line to returned
         event_2.line_quantities.create(line=line_2, quantity=1)
-        self.assertEqual(unicode(order.shipping_status), 'Returned')
+        self.assertEqual(order.shipping_status, _('Returned'))
