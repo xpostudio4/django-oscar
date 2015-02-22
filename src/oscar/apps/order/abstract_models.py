@@ -223,6 +223,7 @@ class AbstractOrder(models.Model):
 
     @property
     def shipping_status(self):
+        """Return the last complete shipping event for this order."""
         events = self.shipping_events.order_by('-date_created').all()
         if not len(events):
             return ''
